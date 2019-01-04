@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+
+    <div class="login-div">
+
+        <h1 class="h2">Login</h1>
+
+        {% if errorLoggingIn %}
+            <p>
+                <font color="red">
+                    <b>
+                        Invalid Username or Password
+                    </b>
+                </font>
+            </p>
+        {% endif %}
+
+        <form method="post" action="accounts/login/">
+            {% csrf_token %}
+            Username:<br>
+            <input type="text" name="username" >
+            <br>
+            Password:
+            <br>
+            <input type="password" name="password">
+            <br><br>
+            <input type="submit" value="Submit">
+    </form>
+    </div>
+
+
+{% endblock %}
