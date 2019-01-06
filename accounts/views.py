@@ -4,6 +4,7 @@ from django.template.context_processors import csrf
 from django.views import View
 
 loginPage = '/accounts/login'
+homePage = "/accounts/home"
 
 
 class loginView(View):
@@ -11,7 +12,8 @@ class loginView(View):
     def get(self, request):
 
         # redirect if already logged in
-        # if request.user.is_authenticated:
+        if request.user.is_authenticated:
+            return redirect(homePage)
 
         # otherwise return the login page
         context = create_context_csrf(request)
@@ -24,13 +26,13 @@ class loginView(View):
 
         if user is not None:
             login(request, user)
-            return redirect("/aaaaaaaaa")
+            return redirect(homePage)
 
         # If not true, then the user will appear on the login page and see an error message
         context = create_context_csrf(request)
         context['errorLoggingIn'] = True
         # context = addValuesToContext(context, request) # adds certain necessary info to the context
-        return render_to_response(loginPage[1:] + ".html", context=context)
+        return render(request, loginPage[1:] + ".html", context=context)
 
 
 # logs out the user and then redirects to the login page
@@ -40,6 +42,18 @@ class logoutView(View):
         if request.user.is_authenticated:
             logout(request)
         return redirect(loginPage)
+
+
+class homeView(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect(loginPage)
+        else:
+            context = create_context_csrf(request)
+            context['loggedIn'] = True
+
+            return render(request, "accounts/home.html", context)
+
 
 
 # helper method to generate a context csrf_token

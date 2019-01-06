@@ -7,15 +7,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link href="/static/layout/styles/layout.css" rel="stylesheet" type="text/css" media="all">
-{#<style type="text/css">#}
-{#/* DEMO ONLY */#}
-{#.container .demo{text-align:center;}#}
-{#.container .demo div{padding:8px 0;}#}
-{#.container .demo div:nth-child(odd){color:#FFFFFF; background:#CCCCCC;}#}
-{#.container .demo div:nth-child(even){color:#FFFFFF; background:#979797;}#}
-{#@media screen and (max-width:900px){.container .demo div{margin-bottom:0;}}#}
-{#/* DEMO ONLY */#}
-{#</style>#}
+
 </head>
 <body id="top">
 <!-- ################################################################################################ -->
@@ -28,34 +20,36 @@
     <header id="header" class="hoc clear">
       <!-- ################################################################################################ -->
       <div id="logo" class="fl_left">
-        <h1><a href="/static/index.html">Emergency Care Assistant</a></h1>
+        <h1 style="padding: 0% 0% 7%;">Emergency Care Assistant</h1>
       </div>
-      <nav id="mainav" class="fl_right">
-        <ul class="clear">
-          <li><a href="127.0.0.1:8000/student/home">Home</a></li>
-          <li><a class="drop" href="#">shifts</a>
-            <ul>
-              <li><a href="#">My Shifts</a></li>
-                <li><a class="drop" href="#">Book Shifts</a>
+      {% if loggedIn %}
+          <nav id="mainav" class="fl_right">
+            <ul class="clear">
+              <li><a href="/accounts/home">Home</a></li>
+              <li><a class="drop" href="#">shifts</a>
                 <ul>
-                  <li><a href="#">Road Shifts</a></li>
-                  <li><a href="#">Hospital Shifts</a></li>
-                  <li><a href="#">ICU Shifts</a></li>
+                  <li><a href="#">My Shifts</a></li>
+                    <li><a class="drop" href="#">Book Shifts</a>
+                    <ul>
+                      <li><a href="#">Road Shifts</a></li>
+                      <li><a href="#">Hospital Shifts</a></li>
+                      <li><a href="#">ICU Shifts</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#">Edit Shifts</a></li>
                 </ul>
               </li>
-              <li><a href="#">Edit Shifts</a></li>
+              <li><a class="drop" href="#">Skills</a>
+                <ul>
+                  <li><a href="#">My Skills</a></li>
+                  <li><a href="/skill/skillLog">Log Skill</a></li>
+                  <li><a href="#">Edit Skills</a></li>
+                </ul>
+              </li>
+              <li><a href="127.0.0.1:8000/accounts/logout">Logout</a></li>
             </ul>
-          </li>
-          <li><a class="drop" href="#">Skills</a>
-            <ul>
-              <li><a href="#">My Skills</a></li>
-              <li><a href="#">Log Skill</a></li>
-              <li><a href="#">Edit Skills</a></li>
-            </ul>
-          </li>
-          <li><a href="127.0.0.1:8000/accounts/logout">Logout</a></li>
-        </ul>
-      </nav>
+          </nav>
+       {% endif %}
     </header>
   </div>
 </div>

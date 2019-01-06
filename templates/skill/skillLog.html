@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Skill Log{% endblock %}
+
+{% block content %}
+
+    <script>
+        function updateCat(){
+                let catList =  document.getElementById("cat");
+                let cat = catList.options [catList.selectedIndex].value;
+                let skillList = document.getElementById("skills");
+
+                let length = skillList.options.length;
+                for (let i = 0; i < length; i++) {
+                    skillList.options[i] = null;
+               }
+
+                {% for currSkill in skills %}
+
+                    if( "{{ currSkill.skillCategory.name }}" === cat){
+
+                        let op = new Option();
+                        op.value = "{{ currSkill.skillID }}";
+                        op.text = "{{ currSkill.name }}";
+                        skillList.options.add(op);
+                    }
+
+                {% endfor %}
+            }
+    </script>
+
+    <style>
+    table, td{border: none;}
+    </style>
+
+    <h1>Log A Skill</h1>
+
+    <form method="post" action="skill/skillLog/">
+
+        <table>
+            <tr>
+                <td style="width: 1%">
+                   <label>Category</label>
+                </td>
+                <td>
+                    <select id = "cat" onchange="updateCat()">
+                     {% for type in categories %}
+                        <option value = "{{ type.name }}">{{ type.name }}</option>
+                     {% endfor %}
+                    </select>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                     <label>Skill</label>
+                </td>
+                <td>
+                     <select id = "skills">
+                         <script>
+                            updateCat();
+                        </script>
+                     </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label>Hospital/Service</label>
+                </td>
+                <td>
+                    <select id = "service">
+                         {% for service in services %}
+                            <option value = "{{ service.serviceID }}">{{ service.name }}</option>
+                         {% endfor %}
+                     </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                     <label>Supervisor</label>
+                </td>
+                <td>
+                    <input type="text" id="supervisor">
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                     <label>Date</label>
+                </td>
+                <td>
+                    <input type="date" id="date" value={{ date }}>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                     <label>Time</label>
+                </td>
+                <td>
+                    <input type="time" id="time" value="{{ time }}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                     <label>comment</label>
+                </td>
+                <td>
+                    <textarea id="comment" style="width: 100%; height: 100px overflow-y: scroll;height: 100px; resize: none;"></textarea>
+                </td>
+            </tr>
+        </table>
+    
+        <input type="submit" value="submit">
+    </form>
+
+{% endblock %}

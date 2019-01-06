@@ -6,4 +6,5 @@ app_name = 'accounts'
 urlpatterns = [
     url(r'login/$', views.loginView.as_view(), name='login'),
     url(r'logout/$', views.logoutView.as_view(), name='logout'),
+    url(r'home/$', views.homeView.as_view(), name='home'),
 ]
