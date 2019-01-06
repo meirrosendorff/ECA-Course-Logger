@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+    <h1>Skill Succesfully Logged</h1>
+
+    <form action="/accounts/home">
+        <input type="submit" value="Home" />
+    </form>
+    </br>
+    <form action="/skill/skillLog">
+        <input type="submit" value="Log New Skill" />
+    </form>
+
+{% endblock %}

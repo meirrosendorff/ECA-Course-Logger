@@ -29,28 +29,30 @@
         }
 
         function formCheck() {
-            
+
+            let errorMessage = document.getElementById('errorMessage')
+
             let cat = document.forms["form"]["cat"].value;
             if (cat === "empty") {
-                alert("Please Select a Category");
+                errorMessage.innerHTML = "Please Select a Category";
                 return false;
               }
 
             let skill = document.forms["form"]["skills"].value;
             if (skill === "empty") {
-                alert("Please Select a skill");
+                errorMessage.innerHTML = "Please Select a skill";
                 return false;
               }
 
             let service = document.forms["form"]["service"].value;
             if (service === "empty") {
-                alert("Please Select a Hospital or Service");
+                errorMessage.innerHTML = "Please Select a Hospital or Service";
                 return false;
               }
 
             let supervisor = document.forms["form"]["supervisor"].value;
             if (supervisor === "") {
-                alert("Please Fill In Your Supervisor");
+                errorMessage.innerHTML = "Please Fill In Your Supervisor";
                 return false;
               }
 
@@ -60,7 +62,7 @@
     </script>
 
     <style>
-    table, td{border: none;}
+    table, td, th{border: none;}
     </style>
 
     <h1>Log A Skill</h1>
@@ -69,14 +71,19 @@
         {% csrf_token %}
         <table>
             <tr>
+                <td colspan="2" id="errorMessage" style="color: red; font-style: italic">
+
+                </td>
+            </tr>
+            <tr>
                 <td style="width: 1%">
                    <label>Category</label>
                 </td>
                 <td>
                     <select id = "cat" onchange="updateCat()">
-                    <option value = "empty" >----------</option>
+                    <option value = "empty" selected>----------</option>
                      {% for type in categories %}
-                        <option value = "{{ type.name }}">{{ type.name }}</option>
+                        <option value="{{ type.name }}">{{ type.name }}</option>
                      {% endfor %}
                     </select>
                 </td>
@@ -88,8 +95,8 @@
                      <label>Skill</label>
                 </td>
                 <td>
-                     <select id = "skills" class="required">
-                         <option value = "empty">----------</option>
+                     <select name="skills" id = "skills" class="required">
+                         <option value = "empty" selected="selected">----------</option>
                          updateCat();
                      </select>
                 </td>
@@ -100,8 +107,8 @@
                     <label>Hospital/Service</label>
                 </td>
                 <td>
-                    <select id = "service" class="required">
-                        <option value = "empty">----------</option>
+                    <select id = "service" name = "service"class="required">
+                        <option value = "empty" selected="selected">----------</option>
                          {% for service in services %}
                             <option value = "{{ service.serviceID }}">{{ service.name }}</option>
                          {% endfor %}
@@ -114,7 +121,7 @@
                      <label>Supervisor</label>
                 </td>
                 <td>
-                    <input type="text" id="supervisor" class="required">
+                    <input type="text" id="supervisor" name="supervisor" class="required">
                 </td>
             </tr>
 
@@ -123,7 +130,7 @@
                      <label>Date</label>
                 </td>
                 <td>
-                    <input type="date" id="date" value={{ date }}>
+                    <input type="date" id="date" name="date" value={{ date }}>
                 </td>
             </tr>
 
@@ -132,7 +139,7 @@
                      <label>Time</label>
                 </td>
                 <td>
-                    <input type="time" id="time" value="{{ time }}">
+                    <input type="time" id="time" name="time" value="{{ time }}">
                 </td>
             </tr>
 
@@ -141,7 +148,7 @@
                      <label>comment</label>
                 </td>
                 <td>
-                    <textarea id="comment" class="required" style="width: 100%; height: 100px overflow-y: scroll;height: 100px; resize: none;"></textarea>
+                    <textarea id="comment" name="comment" class="required" style="width: 100%; height: 100px overflow-y: scroll;height: 100px; resize: none;"></textarea>
                 </td>
             </tr>
         </table>

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, render_to_response
 from django.template.context_processors import csrf
 from django.views import View
 from accounts.views import create_context_csrf, loginPage
-from .models import Skill, SkillCategory
+from .models import Skill, SkillCategory, SkillPerformed
 from shifts.models import Service
 import datetime
 
@@ -35,15 +35,40 @@ class skillLogView(View):
         return render(request, skillLogPage[1:] + ".html", context)
 
     def post(self, request, *args, **kwargs):
-        #
-        # username=request.POST['username'], password=request.POST['password'])
-        #
-        # if user is not None:
-        #     login(request, user)
-        #     return redirect(homePage)
 
-        # If not true, then the user will appear on the login page and see an error message
-        context = create_context_csrf(request)
-        context['errorLoggingIn'] = True
-        # context = addValuesToContext(context, request) # adds certain necessary info to the context
-        return render(request, loginPage[1:] + ".html", context=context)
+
+
+
+        currSkill = request.POST['skills']
+        currService = request.POST['service']
+        currSupervisor = request.POST['supervisor']
+        date = request.POST['date']
+        time = request.POST['time']
+        comment = request.POST['comment']
+
+        newSkill = SkillPerformed()
+
+
+        newSkill.user = request.user
+        newSkill.skill = Skill.objects.get(skillID=currSkill)
+        newSkill.service = Service.objects.get(serviceID=currService)
+        newSkill.supervisor = currSupervisor
+        newSkill.date = date
+        newSkill.time = time
+        newSkill.comment = comment
+
+        newSkill.save()
+
+
+
+        return redirect("/skill/success")
+
+class skillSuccessView(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect(loginPage)
+        else:
+            context = create_context_csrf(request)
+            context['loggedIn'] = True
+
+            return render(request, "skill/success.html", context)

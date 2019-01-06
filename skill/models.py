@@ -31,3 +31,6 @@ class SkillPerformed(models.Model):
     date = models.DateField(null=False)
     time = models.TimeField(null=False)
     comment = models.TextField(null=True)
+
+    def __str__(self):
+        return self.user.username + " - " + self.skill.name
