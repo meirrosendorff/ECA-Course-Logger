@@ -67,3 +67,41 @@ class skillSuccessView(View):
             context = addImportantContext(request, context)
 
             return render(request, "skill/success.html", context)
+
+def mySkillsView(request):
+
+    if request.method == "GET":
+
+        context = create_context_csrf(request)
+
+        # redirect if already logged in
+        if not request.user.is_authenticated:
+            return redirect(loginPage)
+
+        context = addImportantContext(request, context)
+
+        catagories = SkillCategory.objects.all()
+
+        currSkills = SkillPerformed.objects.filter(user=request.user)
+
+        skillSummary = []
+
+        for type in catagories:
+            typeSummary = []
+
+            typeSkills = currSkills.filter(skill__skillCategory__name=type.name)
+
+            skillNames = Skill.objects.filter(skillCategory__name=type.name)
+
+            for name in skillNames:
+
+                curr = typeSkills.filter(skill__name=name.name)
+
+                typeSummary.append((name, name.skillID, len(curr), curr))
+
+            skillSummary.append(typeSummary)
+
+        context['summary'] = skillSummary
+
+        return render(request, "skill/skillSummary.html", context)
+

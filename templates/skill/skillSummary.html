@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <style>
+        table{ }
+        table tr:nth-child(odd) td{
+            background-color: #c4c4c4;
+        }
+
+    </style>
+
+    <h1>{{ user.username }}'s Skills</h1>
+
+
+    {% for type in summary %}
+
+        {% if type %}
+
+            <div style="font-weight: bold">
+                {{ type.0.0.skillCategory.name }} </br></br>
+            </div>
+
+            <table>
+                <tr>
+                    <th style="width: 20%">
+                        Skill
+                    </th>
+                    <th style="width: 1%">
+                        Attempts
+                    </th>
+                    <th style="width: 1%">
+                        Attempts Required
+                    </th>
+                    <th>
+                        Details
+                    </th>
+                </tr>
+
+                {% for skill in type %}
+                    <tr>
+                        <td>
+                            {{ skill.0.name }}
+                        </td>
+                        <td align="center">
+                            {{ skill.2 }}
+                        </td>
+                        <td align="center">
+                            {{ skill.0.attemptsRequired }}
+                        </td>
+                        <td>
+                            {% for attempt in skill.3 %}
+                                ID {{ attempt.skillPerformedID }}:{{ attempt.service }} on {{ attempt.date }} at {{ attempt.time }} under {{ attempt.supervisor }}
+                                </br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
