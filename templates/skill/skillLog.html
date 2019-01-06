@@ -11,7 +11,7 @@
                 let skillList = document.getElementById("skills");
 
                 let length = skillList.options.length;
-                for (let i = 1; i < length; i++) { //starts at 1 to account for placeholder
+                for (let i = 1; i < length; i++) { //starts at 1 to account for empty
                     skillList.options[i] = null;
                }
 
@@ -26,16 +26,38 @@
                     }
 
                 {% endfor %}
-            }
-    </script>
+        }
 
-    {% if error %}
-        <p style="color: red">
-            <b>
-                Invalid Username or Password
-            </b>
-        </p>
-    {% endif %}
+        function formCheck() {
+            
+            let cat = document.forms["form"]["cat"].value;
+            if (cat === "empty") {
+                alert("Please Select a Category");
+                return false;
+              }
+
+            let skill = document.forms["form"]["skills"].value;
+            if (skill === "empty") {
+                alert("Please Select a skill");
+                return false;
+              }
+
+            let service = document.forms["form"]["service"].value;
+            if (service === "empty") {
+                alert("Please Select a Hospital or Service");
+                return false;
+              }
+
+            let supervisor = document.forms["form"]["supervisor"].value;
+            if (supervisor === "") {
+                alert("Please Fill In Your Supervisor");
+                return false;
+              }
+
+            return true
+
+        }
+    </script>
 
     <style>
     table, td{border: none;}
@@ -43,8 +65,8 @@
 
     <h1>Log A Skill</h1>
 
-    <form method="post" action="skill/skillLog/">
-
+    <form method="post" action="skill/skillLog/" id="form" onsubmit="return formCheck()">
+        {% csrf_token %}
         <table>
             <tr>
                 <td style="width: 1%">
@@ -52,7 +74,7 @@
                 </td>
                 <td>
                     <select id = "cat" onchange="updateCat()">
-                    <option value = "placeholder" >----------</option>
+                    <option value = "empty" >----------</option>
                      {% for type in categories %}
                         <option value = "{{ type.name }}">{{ type.name }}</option>
                      {% endfor %}
@@ -66,8 +88,8 @@
                      <label>Skill</label>
                 </td>
                 <td>
-                     <select id = "skills">
-                         <option value = "placeholder">----------</option>
+                     <select id = "skills" class="required">
+                         <option value = "empty">----------</option>
                          updateCat();
                      </select>
                 </td>
@@ -78,8 +100,8 @@
                     <label>Hospital/Service</label>
                 </td>
                 <td>
-                    <select id = "service">
-                        <option value = "placeholder">----------</option>
+                    <select id = "service" class="required">
+                        <option value = "empty">----------</option>
                          {% for service in services %}
                             <option value = "{{ service.serviceID }}">{{ service.name }}</option>
                          {% endfor %}
@@ -92,7 +114,7 @@
                      <label>Supervisor</label>
                 </td>
                 <td>
-                    <input type="text" id="supervisor">
+                    <input type="text" id="supervisor" class="required">
                 </td>
             </tr>
 
@@ -119,7 +141,7 @@
                      <label>comment</label>
                 </td>
                 <td>
-                    <textarea id="comment" style="width: 100%; height: 100px overflow-y: scroll;height: 100px; resize: none;"></textarea>
+                    <textarea id="comment" class="required" style="width: 100%; height: 100px overflow-y: scroll;height: 100px; resize: none;"></textarea>
                 </td>
             </tr>
         </table>
