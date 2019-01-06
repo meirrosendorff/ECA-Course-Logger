@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <style>
+        table{  width: 100%;
+        }
+        table tr:nth-child(odd) td{
+            background-color: #c4c4c4;
+        }
+
+    </style>
+
+    <h1>Booking For {{ bookingType }} Shifts</h1>
+
+    <table>
+        <tr>
+            <th>
+                Service
+            </th>
+            <th>
+                Date and Time
+            </th>
+            <th style="width: 1%">
+                Hours
+            </th>
+            <th style="width: 1%">
+                Places
+            </th>
+            <th>
+                Book
+            </th>
+        </tr>
+
+        {%  for shift in shifts %}
+            <tr>
+                <td>
+                    {{ shift.service.name }}
+                </td>
+                <td>
+                    {{ shift.startDate }} at {{ shift.startTime }}
+                </td>
+                <td align="center">
+                    {{ shift.hours }}
+                </td>
+                <td align="center">
+                    {{ shift.placesAvailable }}
+                </td>
+                <td>
+
+
+                    {% if shift.placesAvailable > 0 %}
+
+                        <form method="post" action="/shifts/booking/{{ bookingType }}/" id="form">
+                            {% csrf_token %}
+                            <input type="hidden" name="shiftID" value={{ shift.shiftID }}>
+                            <input type="submit" value="book">
+                        </form>
+                    {% else %}
+
+                        No Space
+
+                    {% endif %}
+                </td>
+            </tr>
+            
+        {% endfor %}
+
+    </table>
+
+{% endblock %}

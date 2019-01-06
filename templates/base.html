@@ -29,7 +29,15 @@
               <li><a class="drop" href="#">shifts</a>
                 <ul>
                   <li><a href="#">My Shifts</a></li>
-                   <li><a href="#">Book Shifts</a>
+                   <li><a class="drop" href="#">Book Shifts</a>
+                       <ul>
+                           {% for type in shiftTypes %}
+
+                              <li><a href="/shifts/booking/{{ type.name }}">{{ type.name }}</a></li>
+
+                           {% endfor %}
+                       </ul>
+                   </li>
                 </ul>
               </li>
               <li><a class="drop" href="#">Skills</a>

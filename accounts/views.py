@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, render_to_response
 from django.template.context_processors import csrf
 from django.views import View
 from accounts.models import Announcment
+from shifts.models import ShiftType
 
 loginPage = '/accounts/login'
 homePage = "/accounts/home"
@@ -47,10 +48,13 @@ class logoutView(View):
 
 class homeView(View):
     def get(self, request):
+
         if not request.user.is_authenticated:
             return redirect(loginPage)
         else:
             context = create_context_csrf(request)
+
+            context = addImportantContext(request, context)
 
             announcments = Announcment.objects.all()
 
@@ -59,9 +63,9 @@ class homeView(View):
             for x in announcments:
                 announcment += x.text
 
-            context['loggedIn'] = True
+
             context['announcement'] = announcment
-            context['admin'] = request.user.is_superuser
+            context['admin'] = request.user.is_staff
 
             return render(request, "accounts/home.html", context)
 
@@ -85,5 +89,14 @@ class homeView(View):
 def create_context_csrf(request):
     context = {}
     context.update(csrf(request))
+    return context
+
+def addImportantContext(request, context):
+
+    if request.user.is_authenticated:
+        context['loggedIn'] = True
+
+    context['shiftTypes'] = ShiftType.objects.all
+
     return context
 
