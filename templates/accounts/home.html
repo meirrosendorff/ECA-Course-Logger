@@ -4,6 +4,23 @@
 
 {% block content %}
 
-    Welcome Student
+    <h1>Welcome</h1>
+
+
+    Announcements</br></br>
+
+    <form method="post" action="accounts/home/">
+
+        {% csrf_token %}
+
+        <textarea id="comment" {% if not admin %}readonly{% endif %} name="announcment" style="width: 100%; height: 100px; overflow-y: scroll;height: 200px; resize: none;">{{ announcement }}</textarea>
+
+
+        {% if admin %}
+            <input type="submit" value="Submit Change">
+        {% endif %}
+
+    </form>
+
 
 {% endblock %}

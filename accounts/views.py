@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect, render_to_response
 from django.template.context_processors import csrf
 from django.views import View
+from accounts.models import Announcment
 
 loginPage = '/accounts/login'
 homePage = "/accounts/home"
@@ -50,11 +51,35 @@ class homeView(View):
             return redirect(loginPage)
         else:
             context = create_context_csrf(request)
+
+            announcments = Announcment.objects.all()
+
+            announcment = ""
+
+            for x in announcments:
+                announcment += x.text
+
             context['loggedIn'] = True
+            context['announcement'] = announcment
+            context['admin'] = request.user.is_superuser
 
             return render(request, "accounts/home.html", context)
 
+    def post(self, request):
 
+        announcments = Announcment.objects.all()
+
+        if not announcments:
+            announcments = [Announcment()]
+
+        announcment = request.POST['announcment']
+
+
+        for x in announcments:
+            x.text = announcment
+            x.save()
+
+        return redirect(homePage)
 
 # helper method to generate a context csrf_token
 def create_context_csrf(request):
