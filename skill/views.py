@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, render_to_response
 from django.template.context_processors import csrf
 from django.views import View
-from accounts.views import create_context_csrf, loginPage
+from accounts.views import create_context_csrf, loginPage, addImportantContext
 from .models import Skill, SkillCategory, SkillPerformed
 from shifts.models import Service
 import datetime
@@ -18,8 +18,8 @@ class skillLogView(View):
         # redirect if already logged in
         if not request.user.is_authenticated:
             return redirect(loginPage)
-        else:
-            context['loggedIn'] = True
+
+        context = addImportantContext(request, context)
 
         services = Service.objects.all()
         skills = Skill.objects.all()
@@ -35,9 +35,6 @@ class skillLogView(View):
         return render(request, skillLogPage[1:] + ".html", context)
 
     def post(self, request, *args, **kwargs):
-
-
-
 
         currSkill = request.POST['skills']
         currService = request.POST['service']
@@ -59,8 +56,6 @@ class skillLogView(View):
 
         newSkill.save()
 
-
-
         return redirect("/skill/success")
 
 class skillSuccessView(View):
@@ -69,6 +64,6 @@ class skillSuccessView(View):
             return redirect(loginPage)
         else:
             context = create_context_csrf(request)
-            context['loggedIn'] = True
+            context = addImportantContext(request, context)
 
             return render(request, "skill/success.html", context)
