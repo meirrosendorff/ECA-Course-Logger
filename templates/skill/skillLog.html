@@ -11,7 +11,7 @@
                 let skillList = document.getElementById("skills");
 
                 let length = skillList.options.length;
-                for (let i = 0; i < length; i++) {
+                for (let i = 1; i < length; i++) { //starts at 1 to account for placeholder
                     skillList.options[i] = null;
                }
 
@@ -29,6 +29,14 @@
             }
     </script>
 
+    {% if error %}
+        <p style="color: red">
+            <b>
+                Invalid Username or Password
+            </b>
+        </p>
+    {% endif %}
+
     <style>
     table, td{border: none;}
     </style>
@@ -44,6 +52,7 @@
                 </td>
                 <td>
                     <select id = "cat" onchange="updateCat()">
+                    <option value = "placeholder" >----------</option>
                      {% for type in categories %}
                         <option value = "{{ type.name }}">{{ type.name }}</option>
                      {% endfor %}
@@ -58,9 +67,8 @@
                 </td>
                 <td>
                      <select id = "skills">
-                         <script>
-                            updateCat();
-                        </script>
+                         <option value = "placeholder">----------</option>
+                         updateCat();
                      </select>
                 </td>
             </tr>
@@ -71,6 +79,7 @@
                 </td>
                 <td>
                     <select id = "service">
+                        <option value = "placeholder">----------</option>
                          {% for service in services %}
                             <option value = "{{ service.serviceID }}">{{ service.name }}</option>
                          {% endfor %}
@@ -114,7 +123,7 @@
                 </td>
             </tr>
         </table>
-    
+
         <input type="submit" value="submit">
     </form>
 
