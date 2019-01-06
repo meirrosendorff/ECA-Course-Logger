@@ -13,10 +13,13 @@
 
     </style>
 
-    <h1>Booking For {{ bookingType }} Shifts</h1>
+    <h1>Booking For All Shifts</h1>
 
     <table>
         <tr>
+            <th>
+                Shift Type
+            </th>
             <th>
                 Service
             </th>
@@ -36,6 +39,9 @@
 
         {%  for shift in shifts %}
             <tr>
+                <td>
+                    {{ shift.shiftType }}
+                </td>
                 <td>
                     {{ shift.service.name }}
                 </td>

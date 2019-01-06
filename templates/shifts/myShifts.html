@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <style>
+        table{  width: 100%;
+        }
+        table tr:nth-child(odd) td{
+            background-color: #c4c4c4;
+        }
+
+    </style>
+
+    <h1>{{ user.username }}'s Shifts</h1>
+
+    {% for shifts in allShifts %}
+
+        {% if shifts %}
+
+            <div style="font-weight: bold">
+                {{ shifts.0.shiftType }} Shifts </br></br>
+            </div>
+
+            <table>
+                <tr>
+                    <th>
+                        Service
+                    </th>
+                    <th>
+                        Date and Time
+                    </th>
+                    <th style="width: 1%">
+                        Hours
+                    </th>
+                    <th>
+                        Remove
+                    </th>
+                </tr>
+
+                {%  for shift in shifts %}
+                    <tr>
+                        <td>
+                            {{ shift.service.name }}
+                        </td>
+                        <td>
+                            {{ shift.startDate }} at {{ shift.startTime }}
+                        </td>
+                        <td align="center">
+                            {{ shift.hours }}
+                        </td>
+                        <td align="center">
+                            <form method="post" action="/shifts/remove/" id="form">
+                                {% csrf_token %}
+                                <input type="hidden" name="shiftID" value={{ shift.shiftID }}>
+                                <input type="submit" value="remove">
+                            </form>
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+            </table>
+
+        {% endif %}
+    {% endfor %}
+
+
+{% endblock %}
