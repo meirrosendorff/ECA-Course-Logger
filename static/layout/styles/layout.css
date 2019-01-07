@@ -280,7 +280,7 @@ label span{color:#FF0000; background-color:inherit;}
 /* Rows */
 .row1{color:#FFFFFF; background-color:rgba(0,0,0,.60);}
 .row2{color:#191919; background-color:#F6F6F6;}
-.row3{color:#191919; background-color:#FFFFFF;}
+.row3{color:#191919; background-color:#ebebeb;}
 .row4{color:#CBCBCB;}
 .row5, .row5 a{color:#CBCBCB; background-color:#191919;}
 
@@ -336,9 +336,10 @@ label span{color:#FF0000; background-color:inherit;}
 table, th, td, #comments .avatar, #comments input, #comments textarea{border-color:#D7D7D7;}
 #comments input:focus, #comments textarea:focus, #comments *:required:focus{border-color:#A2B70D;}
 th{color:#FFFFFF; background-color:#373737;}
-tr, #comments li, #comments input[type="submit"], #comments input[type="reset"]{color:inherit; background-color:#FBFBFB;}
-tr:nth-child(even), #comments li:nth-child(even){color:inherit; background-color:#F7F7F7;}
+tr, #comments li, #comments input[type="submit"], #comments input[type="reset"]{color:inherit; background-color:#ebebeb;}
+tr:nth-child(even), #comments li:nth-child(even){color:inherit; background-color:#ebebeb;}
 table a, #comments a{background-color:inherit;}
+textarea{background-color: #ebebeb}
 
 
 /* ------------------------------------------------------------------------------------------------------------ */
