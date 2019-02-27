@@ -12,7 +12,7 @@
 
     </style>
 
-    <h1>{{ user.username }}'s Skills</h1>
+    <h1>{{ username }}'s Skills</h1>
 
 
     {% for type in summary %}
@@ -52,7 +52,7 @@
                         </td>
                         <td>
                             {% for attempt in skill.3 %}
-                                ID {{ attempt.skillPerformedID }}:{{ attempt.service }} on {{ attempt.date }} at {{ attempt.time }} under {{ attempt.supervisor }}
+                                {{ attempt.service }} on {{ attempt.date }} at {{ attempt.time }} under {{ attempt.supervisor }}
                                 </br>
                             {% endfor %}
                         </td>
@@ -61,4 +61,12 @@
             </table>
         {% endif %}
     {% endfor %}
+
+    {% if isStaff %}
+
+        <form action="/skill/studentsSkills/" method="get">
+        <input type="submit" value="return to student list" />
+        </form>
+
+    {% endif %}
 {% endblock %}

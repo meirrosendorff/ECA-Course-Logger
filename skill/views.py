@@ -5,6 +5,7 @@ from accounts.views import create_context_csrf, loginPage, addImportantContext
 from .models import Skill, SkillCategory, SkillPerformed
 from shifts.models import Service
 import datetime
+from django.contrib.auth.models import User
 
 skillLogPage = "/skill/skillLog"
 
@@ -68,40 +69,80 @@ class skillSuccessView(View):
 
             return render(request, "skill/success.html", context)
 
-def mySkillsView(request):
+def mySkillsView(request, user=None):
+
+    context = create_context_csrf(request)
+
+    # redirect if not already logged in
+    if not request.user.is_authenticated:
+        return redirect(loginPage)
+
+    context = addImportantContext(request, context)
+
+
+    if user is None:
+        user = request.user
+
+    context['username'] = user.first_name + " " + user.last_name
+
+    catagories = SkillCategory.objects.all()
+
+    currSkills = SkillPerformed.objects.filter(user=user)
+
+    skillSummary = []
+
+    for type in catagories:
+        typeSummary = []
+
+        typeSkills = currSkills.filter(skill__skillCategory__name=type.name)
+
+        skillNames = Skill.objects.filter(skillCategory__name=type.name)
+
+        for name in skillNames:
+
+            curr = typeSkills.filter(skill__name=name.name)
+
+            typeSummary.append((name, name.skillID, len(curr), curr))
+
+        skillSummary.append(typeSummary)
+
+    context['summary'] = skillSummary
+
+    return render(request, "skill/skillSummary.html", context)
+
+def studentsSkillsView(request):
+    # redirect if not already logged in
+    if not request.user.is_authenticated:
+        return redirect(loginPage)
+
+    context = create_context_csrf(request)
+    context = addImportantContext(request, context)
+
+    if not request.user.is_staff:
+        return render(request, "notStaff.html", context)
 
     if request.method == "GET":
 
-        context = create_context_csrf(request)
+        students = User.objects.filter(is_staff=False)
 
-        # redirect if already logged in
-        if not request.user.is_authenticated:
-            return redirect(loginPage)
+        studentList = [(student.username, student.first_name + " " + student.last_name) for student in students]
 
-        context = addImportantContext(request, context)
+        context['studentList'] = studentList
 
-        catagories = SkillCategory.objects.all()
+        return render(request, "skill/studentsSkills.html", context)
 
-        currSkills = SkillPerformed.objects.filter(user=request.user)
+    if request.method == "POST":
 
-        skillSummary = []
+        # try:
 
-        for type in catagories:
-            typeSummary = []
+        username = request.POST['username']
 
-            typeSkills = currSkills.filter(skill__skillCategory__name=type.name)
+        user = User.objects.get(username=username)
 
-            skillNames = Skill.objects.filter(skillCategory__name=type.name)
+        context['username'] = username
 
-            for name in skillNames:
-
-                curr = typeSkills.filter(skill__name=name.name)
-
-                typeSummary.append((name, name.skillID, len(curr), curr))
-
-            skillSummary.append(typeSummary)
-
-        context['summary'] = skillSummary
-
-        return render(request, "skill/skillSummary.html", context)
-
+        return mySkillsView(request, user)
+        #
+        # except:
+        #
+        #     return render(request, "error.html", context)

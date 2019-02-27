@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+    <style>
+        table{  width: 100%;
+        }
+        table tr:nth-child(odd) td{
+            background-color: #c4c4c4;
+        }
+    </style>
+
+    <h1>Student's Skills</h1>
+
+    <p>Please Choose a Students to view their Skill Summary:</p>
+
+    <table>
+        {% for student in studentList %}
+            <tr>
+                <td>
+                    Student ID: {{ student.0 }} - {{ student.1 }}
+                </td>
+                <td>
+                    <form method="post" action="/skill/studentsSkills" id="form">
+                        {% csrf_token %}
+                        <input type="hidden" name="username" value={{ student.0 }}>
+                        <input type="submit" value="View">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
