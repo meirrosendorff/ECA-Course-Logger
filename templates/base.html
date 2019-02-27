@@ -9,6 +9,31 @@
 <link href="/static/layout/styles/layout.css" rel="stylesheet" type="text/css" media="all">
 
 </head>
+
+{#Styles to set tables to fit in page and look how I want#}
+
+<style>
+    body{
+        min-width:800px;        /* minimum width of 1000px */
+        width: auto
+    }
+    tr td th{
+    width:1%;
+    white-space:nowrap;
+    }
+    ul{
+        padding-left: 15px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    ol{
+        padding-left: 20px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+</style>
 <body id="top">
 <!-- ################################################################################################ -->
 <!-- ################################################################################################ -->
@@ -28,10 +53,10 @@
               <li><a href="/accounts/home">Home</a></li>
 
               {% if isStaff %}
-                  <li><a class="drop" href="/shifts/allShifts">Shifts</a>
+                  <li><a class="drop" href="/shifts/shiftSummary">Shifts</a>
                     <ul>
                         <li>
-                            <a href="/shifts/allShifts">All Shifts</a>
+                            <a href="/shifts/shiftSummary">All Shifts</a>
                         </li>
                         <li>
                             <a href="/shifts/studentsShifts">Student's Shifts</a>
@@ -73,7 +98,7 @@
 <!-- ################################################################################################ -->
 <!-- ################################################################################################ -->
 <div class="wrapper row3">
-  <main class="hoc container clear">
+  <main class="hoc container clear" style="min-height: 800px">
     {% block content %}
     {% endblock %}
   </main>
