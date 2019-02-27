@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Shift Summary{% endblock %}
+
+{% block content %}
+
+    <style>
+        table tr:nth-child(odd) td{
+            background-color: #c4c4c4;
+        }
+    ul{
+        margin-left:10px;
+    }
+    </style>
+
+    <h1>Shift Summary</h1>
+
+    {% for type in summary %}
+
+        <b>{{ type.0}}</b>
+        <br/>
+        <br/>
+
+        <table>
+
+            <tr>
+                <th>
+                    Service
+                </th>
+                <th>
+                    Date and Time
+                </th>
+                <th>
+                    Hours
+                </th>
+                <th>
+                    Places Left
+                </th>
+                <th>
+                    Students
+                </th>
+            </tr>
+            {% for shift in type.1 %}
+                <tr>
+                    <td>
+                        {{ shift.0.service }}
+                    </td>
+                    <td>
+                        {{ shift.0.startDate }} at {{ shift.0.startTime }}
+                    </td>
+                    <td>
+                        {{ shift.0.hours }}
+                    </td>
+                    <td>
+                        {{ shift.0.placesAvailable }}
+                    </td>
+                    <td>
+                        <ul>
+                            {% for studentShift in shift.1 %}
+                                <li>
+                                    {{ studentShift.student.first_name }} {{ studentShift.student.last_name }}
+                                </li>
+                        {% endfor %}
+                        </ul>
+
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+
+
+{% endblock %}

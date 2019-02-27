@@ -133,16 +133,16 @@ def studentsSkillsView(request):
 
     if request.method == "POST":
 
-        # try:
+        try:
 
-        username = request.POST['username']
+            username = request.POST['username']
 
-        user = User.objects.get(username=username)
+            user = User.objects.get(username=username)
 
-        context['username'] = username
+            context['username'] = username
 
-        return mySkillsView(request, user)
-        #
-        # except:
-        #
-        #     return render(request, "error.html", context)
+            return mySkillsView(request, user)
+
+        except:
+
+            return render(request, "error.html", context)

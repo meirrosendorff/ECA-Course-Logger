@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Skill Summary{% endblock %}
 
 {% block content %}
 
     <style>
-        table{ }
+
         table tr:nth-child(odd) td{
             background-color: #c4c4c4;
         }
@@ -51,10 +51,14 @@
                             {{ skill.0.attemptsRequired }}
                         </td>
                         <td>
-                            {% for attempt in skill.3 %}
-                                {{ attempt.service }} on {{ attempt.date }} at {{ attempt.time }} under {{ attempt.supervisor }}
-                                </br>
+                            <ol type="1">
+                                {% for attempt in skill.3 %}
+                                    <li>
+                                        {{ attempt.service }} on {{ attempt.date }} at {{ attempt.time }} under {{ attempt.supervisor }}
+                                    </li>
                             {% endfor %}
+                            </ol>
+
                         </td>
                     </tr>
                 {% endfor %}

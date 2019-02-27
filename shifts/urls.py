@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'booking/$', bookingGlobalView, name='bookingGlobal'),
     url(r'myShifts/$', myShiftsView, name='myShifts'),
     url(r'remove/$', removeShift, name='remove'),
+    url(r'shiftSummary/$', shiftSummaryView, name='shiftSummary'),
 ]

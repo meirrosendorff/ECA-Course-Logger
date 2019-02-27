@@ -142,3 +142,32 @@ def removeShift(request):
 
 
         return redirect("/shifts/myShifts/")
+
+def shiftSummaryView(request):
+
+
+    if not request.user.is_authenticated:
+        return redirect(loginPage)
+
+    context = create_context_csrf(request)
+    context = addImportantContext(request, context)
+
+    if not request.user.is_staff:
+        return render(request, "notStaff.html", context)
+
+    summary = []
+
+
+    shiftTypes = ShiftType.objects.all()
+
+    for type in shiftTypes:
+
+        shifts = Shift.objects.filter(shiftType=type)
+
+        typeSummary = [(shift, studentShift.objects.filter(shift=shift)) for shift in shifts]
+
+        summary.append((type.name, typeSummary))
+
+    context['summary'] = summary
+
+    return render(request, "shifts/shiftSummary.html", context)
