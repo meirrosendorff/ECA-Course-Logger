@@ -26,26 +26,41 @@
           <nav id="mainav" class="fl_right">
             <ul class="clear">
               <li><a href="/accounts/home">Home</a></li>
-              <li><a class="drop" href="/shifts/myShifts/">Shifts</a>
-                <ul>
-                  <li><a href="/shifts/myShifts/">My Shifts</a></li>
-                   <li><a class="drop" href="/shifts/booking/">Book Shifts</a>
-                       <ul>
-                           {% for type in shiftTypes %}
 
-                              <li><a href="/shifts/booking/{{ type.name }}">{{ type.name }}</a></li>
+              {% if isStaff %}
+                  <li><a class="drop" href="/shifts/allShifts">Shifts</a>
+                    <ul>
+                        <li>
+                            <a href="/shifts/allShifts">All Shifts</a>
+                        </li>
+                        <li>
+                            <a href="/shifts/studentsShifts">Student's Shifts</a>
+                        </li>
+                    </ul>
+                  </li>
+                  <li><a href="/skill/studentsSkills/">Skills</a></li>
+              {% else %}
+                  <li><a class="drop" href="/shifts/myShifts/">Shifts</a>
+                    <ul>
+                      <li><a href="/shifts/myShifts/">My Shifts</a></li>
+                       <li><a class="drop" href="/shifts/booking/">Book Shifts</a>
+                           <ul>
+                               {% for type in shiftTypes %}
 
-                           {% endfor %}
-                       </ul>
-                   </li>
-                </ul>
-              </li>
-              <li><a class="drop" href="/skill/mySkills">Skills</a>
-                <ul>
-                  <li><a href="/skill/mySkills">My Skills</a></li>
-                  <li><a href="/skill/skillLog">Log Skill</a></li>
-                </ul>
-              </li>
+                                  <li><a href="/shifts/booking/{{ type.name }}">{{ type.name }}</a></li>
+
+                               {% endfor %}
+                           </ul>
+                       </li>
+                    </ul>
+                  </li>
+                  <li><a class="drop" href="/skill/mySkills">Skills</a>
+                    <ul>
+                      <li><a href="/skill/mySkills">My Skills</a></li>
+                      <li><a href="/skill/skillLog">Log Skill</a></li>
+                    </ul>
+                  </li>
+              {% endif %}
               <li><a href="/accounts/logout">Logout</a></li>
             </ul>
           </nav>

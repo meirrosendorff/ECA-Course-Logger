@@ -91,10 +91,17 @@ def create_context_csrf(request):
     context.update(csrf(request))
     return context
 
+
 def addImportantContext(request, context):
+
+    context['isStaff'] = False
+    context['loggedIn'] = False
 
     if request.user.is_authenticated:
         context['loggedIn'] = True
+
+    if request.user.is_staff:
+        context['isStaff'] = True
 
     context['shiftTypes'] = ShiftType.objects.all
 
