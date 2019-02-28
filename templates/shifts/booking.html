@@ -14,58 +14,64 @@
     </style>
 
     <h1>Booking For {{ bookingType }} Shifts</h1>
-
-    <table>
-        <tr>
-            <th>
-                Service
-            </th>
-            <th>
-                Date and Time
-            </th>
-            <th style="width: 1%">
-                Hours
-            </th>
-            <th style="width: 1%">
-                Places
-            </th>
-            <th>
-                Book
-            </th>
-        </tr>
-
-        {%  for shift in shifts %}
+    {% if shifts %}
+        <table>
             <tr>
-                <td>
-                    {{ shift.service.name }}
-                </td>
-                <td>
-                    {{ shift.startDate }} at {{ shift.startTime }}
-                </td>
-                <td align="center">
-                    {{ shift.hours }}
-                </td>
-                <td align="center">
-                    {{ shift.placesAvailable }}
-                </td>
-                <td align="center">
-                    {% if shift.placesAvailable > 0 %}
-
-                        <form method="post" action="/shifts/booking/{{ bookingType }}/" id="form">
-                            {% csrf_token %}
-                            <input type="hidden" name="shiftID" value={{ shift.shiftID }}>
-                            <input type="submit" value="book">
-                        </form>
-                    {% else %}
-
-                        No Space
-
-                    {% endif %}
-                </td>
+                <th>
+                    Service
+                </th>
+                <th>
+                    Date and Time
+                </th>
+                <th style="width: 1%">
+                    Hours
+                </th>
+                <th style="width: 1%">
+                    Places
+                </th>
+                <th>
+                    Book
+                </th>
             </tr>
-            
-        {% endfor %}
 
-    </table>
+            {%  for shift in shifts %}
+                <tr>
+                    <td>
+                        {{ shift.0.service.name }}
+                    </td>
+                    <td>
+                        {{ shift.0.startDate }} at {{ shift.0.startTime }}
+                    </td>
+                    <td align="center">
+                        {{ shift.0.hours }}
+                    </td>
+                    <td align="center">
+                        {{ shift.0.placesAvailable }}
+                    </td>
+                    <td align="center">
+                        {% if shift.1 %}
+                            <div style="color: #414905">
+                                Booked
+                            </div>
+                        {% elif shift.0.placesAvailable > 0 %}
 
+                            <form method="post" action="/shifts/booking/{{ bookingType }}/" id="form">
+                                {% csrf_token %}
+                                <input type="hidden" name="shiftID" value={{ shift.0.shiftID }}>
+                                <input type="submit" value="book">
+                            </form>
+                        {% else %}
+                            <div style="color: darkred">
+                                No Space
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+        </table>
+    {% else %}
+        <b>No Shifts Available</b>
+    {% endif %}
 {% endblock %}

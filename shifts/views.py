@@ -21,9 +21,11 @@ def bookingView(request, bookingType):
 
                 shiftType = ShiftType.objects.get(name=bookingType)
                 booked = studentShift.objects.filter(student=request.user)
-                bookedIDs = [o.shift.shiftID for o in booked]
-                availableShifts = Shift.objects.all().filter(shiftType=shiftType).exclude(shiftID__in=bookedIDs)
-                context['shifts'] = availableShifts.order_by('startDate', 'startTime')
+                bookedIDs = [booking.shift.shiftID for booking in booked]
+                allShifts = Shift.objects.all().filter(shiftType=shiftType).order_by('startDate', 'startTime')
+
+                shifts = [(i, i.shiftID in bookedIDs) for i in allShifts]
+                context['shifts'] = shifts
 
 
 
@@ -66,15 +68,17 @@ def bookingGlobalView(request):
             try:
 
                 booked = studentShift.objects.filter(student=request.user)
-                bookedIDs = [o.shift.shiftID for o in booked]
-                availableShifts = Shift.objects.all().exclude(shiftID__in=bookedIDs)
-                context['shifts'] = availableShifts.order_by('startDate', 'startTime')
+                bookedIDs = [booking.shift.shiftID for booking in booked]
+                allShifts = Shift.objects.all().order_by('startDate', 'startTime')
+
+                shifts = [(i, i.shiftID in bookedIDs) for i in allShifts]
+                context['shifts'] = shifts
+
 
             except:
                 return render(request, "error.html", context)
 
             return render(request, "shifts/bookingGlobal.html", context)
-
 
     elif request.method == 'POST':
 
