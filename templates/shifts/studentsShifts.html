@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Student's Skills{% endblock %}
+{% block title %}Student's Shifts{% endblock %}
 
 {% block content %}
 
@@ -12,9 +12,9 @@
         }
     </style>
 
-    <h1>Student's Skills</h1>
+    <h1>Student's Shifts</h1>
 
-    <p>Please Choose a Students to view their Skill Summary:</p>
+    <p>Please Choose a Student to view their Shift Summary:</p>
 
     <table>
         {% for student in studentList %}
@@ -23,7 +23,7 @@
                     Student ID: {{ student.0 }} - {{ student.1 }}
                 </td>
                 <td>
-                    <form method="post" action="/skill/studentsSkills" id="form">
+                    <form method="post" action="/shifts/studentsShifts/" id="form">
                         {% csrf_token %}
                         <input type="hidden" name="username" value={{ student.0 }}>
                         <input type="submit" value="View">

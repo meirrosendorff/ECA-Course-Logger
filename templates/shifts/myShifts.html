@@ -13,7 +13,7 @@
 
     </style>
 
-    <h1>{{ user.username }}'s Shifts</h1>
+    <h1>{{ username }}'s Shifts</h1>
 
     {% for shifts in allShifts %}
 
@@ -54,6 +54,7 @@
                             <form method="post" action="/shifts/remove/" id="form">
                                 {% csrf_token %}
                                 <input type="hidden" name="shiftID" value={{ shift.shiftID }}>
+                                <input type="hidden" name="next" value="{{ request.path }}">
                                 <input type="submit" value="remove">
                             </form>
                         </td>
@@ -66,5 +67,11 @@
         {% endif %}
     {% endfor %}
 
+    {% if isStaff %}
 
+        <form action="/shifts/studentsShifts/" method="get">
+        <input type="submit" value="return to student list" />
+        </form>
+
+    {% endif %}
 {% endblock %}

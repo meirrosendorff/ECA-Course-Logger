@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.views import View
 from accounts.views import create_context_csrf, addImportantContext, loginPage
@@ -91,23 +92,28 @@ def bookingGlobalView(request):
 
         currStudentShift.save()
 
-
         return redirect("/shifts/booking/")
 
-def myShiftsView(request):
 
-    if request.method == 'GET':
-        if not request.user.is_authenticated:
-            return redirect(loginPage)
-        else:
-            context = create_context_csrf(request)
+def myShiftsView(request, user=None):
 
-            context = addImportantContext(request, context)
+    if not request.user.is_authenticated:
+        return redirect(loginPage)
+    else:
 
-            # try:
+        if user is None:
+            user = request.user
+
+        context = create_context_csrf(request)
+
+        context = addImportantContext(request, context)
+
+        context['username'] = user.first_name + " " + user.last_name
+
+        try:
 
             types = ShiftType.objects.all()
-            studentShifts = studentShift.objects.filter(student=request.user)
+            studentShifts = studentShift.objects.filter(student=user)
             studentShiftID = [o.shift.shiftID for o in studentShifts]
 
             studentShifts = Shift.objects.filter(shiftID__in=studentShiftID)
@@ -119,16 +125,18 @@ def myShiftsView(request):
 
             context['allShifts'] = allShifts
             context['user'] = request.user
-            #
-            # except:
-            #     return render(request, "error.html", context)
 
-            return render(request, "shifts/myShifts.html", context)
+        except:
+            return render(request, "error.html", context)
 
-def removeShift(request):
+        return render(request, "shifts/myShifts.html", context)
+
+def removeShift(request, user=None):
     if request.method == 'POST':
 
         shiftID = request.POST['shiftID']
+
+        currPage = request.POST['next']
 
         currShift = Shift.objects.get(shiftID=shiftID)
 
@@ -136,15 +144,17 @@ def removeShift(request):
         currShift.placesAvailable += 1
         currShift.save()
 
-        currStudentShift = studentShift.objects.filter(student=request.user, shift__shiftID=shiftID)
+        if user is None:
+            user = request.user
+
+        currStudentShift = studentShift.objects.filter(student=user, shift__shiftID=shiftID)
 
         currStudentShift.delete()
 
+        return redirect(currPage)
 
-        return redirect("/shifts/myShifts/")
 
 def shiftSummaryView(request):
-
 
     if not request.user.is_authenticated:
         return redirect(loginPage)
@@ -156,7 +166,6 @@ def shiftSummaryView(request):
         return render(request, "notStaff.html", context)
 
     summary = []
-
 
     shiftTypes = ShiftType.objects.all()
 
@@ -171,3 +180,39 @@ def shiftSummaryView(request):
     context['summary'] = summary
 
     return render(request, "shifts/shiftSummary.html", context)
+
+
+def studentsShiftsView(request):
+    # redirect if not already logged in
+    if not request.user.is_authenticated:
+        return redirect(loginPage)
+
+    context = create_context_csrf(request)
+    context = addImportantContext(request, context)
+
+    if not request.user.is_staff:
+        return render(request, "notStaff.html", context)
+
+    if request.method == "GET":
+
+        students = User.objects.filter(is_staff=False)
+
+        studentList = [(student.username, student.first_name + " " + student.last_name) for student in students]
+
+        context['studentList'] = studentList
+
+        return render(request, "shifts/studentsShifts.html", context)
+
+    if request.method == "POST":
+
+        try:
+
+            username = request.POST['username']
+
+            user = User.objects.get(username=username)
+
+            return myShiftsView(request, user)
+
+        except:
+
+            return render(request, "error.html", context)
